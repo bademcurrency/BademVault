@@ -37,7 +37,7 @@ export class LedgerService {
 
   ledger = {
     status: LedgerStatus.NOT_CONNECTED,
-    ceviz: null,
+    badem: null,
     transport: null,
   };
 
@@ -47,11 +47,11 @@ export class LedgerService {
   // Reset connection to the ledger device, update the status
   resetLedger(errorMessage = '') {
     this.ledger.transport = null;
-    this.ledger.ceviz = null;
+    this.ledger.badem = null;
     this.setLedgerStatus(LedgerStatus.NOT_CONNECTED, errorMessage);
   }
 
-  // Open a connection to the usb device and initialize up the Ceviz Ledger library
+  // Open a connection to the usb device and initialize up the Badem Ledger library
   async loadTransport() {
     return new Promise((resolve, reject) => {
       TransportNodeHid.create().then(trans => {
@@ -59,7 +59,7 @@ export class LedgerService {
         this.ledger.transport = trans;
         this.ledger.transport.setDebugMode(true); //TODO: Deprecated. Replace with @ledgerhq/logs
         this.ledger.transport.setExchangeTimeout(this.waitTimeout); // 5 minutes
-        this.ledger.ceviz = new Ceviz(this.ledger.transport);
+        this.ledger.badem = new Badem(this.ledger.transport);
 
         resolve(this.ledger.transport);
       }).catch(reject);
@@ -68,7 +68,7 @@ export class LedgerService {
 
   async loadAppConfig(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ledger.ceviz.getAppConfiguration().then(resolve).catch(reject);
+      this.ledger.badem.getAppConfiguration().then(resolve).catch(reject);
     })
   }
 
@@ -126,7 +126,7 @@ export class LedgerService {
       this.ledger.transport.setExchangeTimeout(showOnScreen ? this.waitTimeout : this.normalTimeout);
 
       this.queryingLedger = true;
-      const account = await this.ledger.ceviz.getAddress(this.ledgerPath(accountIndex), showOnScreen);
+      const account = await this.ledger.badem.getAddress(this.ledgerPath(accountIndex), showOnScreen);
       this.queryingLedger = false;
 
       this.ledgerMessage$.next({ event: 'account-details', data: Object.assign({ accountIndex }, account) });
@@ -150,7 +150,7 @@ export class LedgerService {
   async cacheBlock(accountIndex, cacheData, signature) {
     try {
       this.queryingLedger = true;
-      const cacheResponse = await this.ledger.ceviz.cacheBlock(this.ledgerPath(accountIndex), cacheData, signature);
+      const cacheResponse = await this.ledger.badem.cacheBlock(this.ledgerPath(accountIndex), cacheData, signature);
       this.queryingLedger = false;
 
       this.ledgerMessage$.next({ event: 'cache-block', data: Object.assign({ accountIndex }, cacheResponse) });
@@ -167,7 +167,7 @@ export class LedgerService {
   async signBlock(accountIndex, blockData) {
     try {
       this.queryingLedger = true;
-      const signResponse = await this.ledger.ceviz.signBlock(this.ledgerPath(accountIndex), blockData);
+      const signResponse = await this.ledger.badem.signBlock(this.ledgerPath(accountIndex), blockData);
       this.queryingLedger = false;
 
       this.ledgerMessage$.next({ event: 'sign-block', data: Object.assign({ accountIndex }, signResponse) });

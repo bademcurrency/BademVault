@@ -119,7 +119,7 @@ export class RepresentativeService {
     const onlineReps = await this.getOnlineRepresentatives();
     const quorum = await this.api.confirmationQuorum();
 
-    const online_stake_total = quorum ? this.util.ceviz.rawToMceviz(quorum.online_stake_total) : null;
+    const online_stake_total = quorum ? this.util.badem.rawToMbadem(quorum.online_stake_total) : null;
     this.onlineStakeTotal = online_stake_total ? new BigNumber(online_stake_total) : null;
 
     const allReps = [];
@@ -129,7 +129,7 @@ export class RepresentativeService {
       const repOnline = onlineReps.indexOf(representative.account) !== -1;
       const knownRep = this.getRepresentative(representative.account);
 
-      const nanoWeight = this.util.ceviz.rawToMceviz(representative.weight || 0);
+      const nanoWeight = this.util.badem.rawToMbadem(representative.weight || 0);
       const percent = this.onlineStakeTotal ? nanoWeight.div(this.onlineStakeTotal).times(100) : new BigNumber(0);
 
       const repStatus: RepresentativeStatus = {
@@ -348,23 +348,23 @@ export class RepresentativeService {
   // tslint:disable-next-line:member-ordering
   defaultRepresentatives = [
     {
-      id: 'ceviz_3mh5qkrwhf9p6ppk5ci5yyoq9t5jhnfy4mm9fkwxeda9noxjc73imwb5bzhm',
-      name: 'Ceviz Representative #1',
+      id: 'badem_33zto317ffjjqssnd4z186mrfrn6t6tuwxuxyqd4drpwx3ymzq9y1mt16h13',
+      name: 'Badem Representative #1',
       warn: true,
     },
     {
-      id: 'ceviz_385hcwzmm5dn5nrmu1opayeeqrgwihh3k3tezpgc91keac6bf76wmp8sqrd1',
-      name: 'Ceviz Representative #2',
+      id: 'badem_39djjm4fmwko4yayxmsqsfzrsbxkri8ocwcp44m88y9ekzsw3q76zaooogie',
+      name: 'Badem Representative #2',
       warn: true,
     },
     {
-      id: 'ceviz_3gbpjit54j98kad1hqmg6w4eeroqyayi7cb6nkthhy6u9bgczy784psmk9ky',
-      name: 'Ceviz Representative #3',
+      id: 'badem_1777re9rpkmgxsgrj1qx47yt6rd1fx6sjb9xmqcq6kxkthc795tf9hj8c7yk',
+      name: 'Badem Representative #3',
       warn: true,
     },
     {
-      id: 'ceviz_3aup3wfzrdg14mze8nkj96rkm774tdiapfw3nr7sa7e4zc443rrq7bw34au5',
-      name: 'Ceviz Representative #4',
+      id: 'badem_3i1ytwxnb6it4knde5p6t9bwaaw4wurm6zrhqb1rqf3ig43yn3urkqtau6wc',
+      name: 'Badem Representative #4',
       warn: true,
     },
   ];

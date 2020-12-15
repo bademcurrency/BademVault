@@ -2,7 +2,7 @@
   "name": "nault",
   "version": "1.7.9",
   "license": "MIT",
-  "description": "Wallet for interacting with Ceviz",
+  "description": "Wallet for interacting with Badem",
   "author": "The Nano Community / Andrew Steele",
   "main": "desktop-app/dist/desktop-app.js",
   "scripts": {
@@ -96,7 +96,7 @@
   "build": {
     "appId": "cc.nault",
     "buildVersion": "1.6.1",
-    "productName": "CevizVault",
+    "productName": "BademVault",
     "copyright": "Copyright © 2020 The Nano Community / Andrew Steele",
     "directories": {
       "output": "desktop-app/build",
@@ -109,9 +109,9 @@
       "extendInfo": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLName": "ceviz",
+            "CFBundleURLName": "badem",
             "CFBundleURLSchemes": [
-              "ceviz"
+              "badem"
             ]
           }
         ]
@@ -128,9 +128,9 @@
       }
     ],
     "protocols": {
-      "name": "ceviz",
+      "name": "badem",
       "schemes": [
-        "ceviz"
+        "badem"
       ],
       "role": "Viewer"
     }

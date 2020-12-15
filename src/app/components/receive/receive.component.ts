@@ -6,7 +6,7 @@ import {ApiService} from '../../services/api.service';
 import {UtilService} from '../../services/util.service';
 import {WorkPoolService} from '../../services/work-pool.service';
 import {AppSettingsService} from '../../services/app-settings.service';
-import {CevizBlockService} from '../../services/nano-block.service';
+import {BademBlockService} from '../../services/nano-block.service';
 import * as QRCode from 'qrcode';
 import BigNumber from 'bignumber.js';
 
@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js';
 
 
 export class ReceiveComponent implements OnInit {
-  ceviz = 100;
+  badem = 100;
   accounts = this.walletService.wallet.accounts;
   pendingBelowThreshold = [];
 
@@ -28,7 +28,7 @@ export class ReceiveComponent implements OnInit {
   qrCodeImage = null;
   qrAccount = '';
   qrAmount: BigNumber = null;
-  minAmount: BigNumber = this.settings.settings.minimumReceive ? this.util.ceviz.mcevizToRaw(this.settings.settings.minimumReceive) : null;
+  minAmount: BigNumber = this.settings.settings.minimumReceive ? this.util.badem.mbademToRaw(this.settings.settings.minimumReceive) : null;
   walletAccount: WalletAccount = null;
   selAccountInit = false;
   loadingIncomingTxList = false;
@@ -40,7 +40,7 @@ export class ReceiveComponent implements OnInit {
     private api: ApiService,
     private workPool: WorkPoolService,
     public settings: AppSettingsService,
-    private cevizBlock: CevizBlockService,
+    private bademBlock: BademBlockService,
     private util: UtilService) { }
 
   async ngOnInit() {
@@ -101,7 +101,7 @@ export class ReceiveComponent implements OnInit {
     let qrCode = null;
     if (account.length > 1) {
       this.qrAccount = account;
-      qrCode = await QRCode.toDataURL('ceviz:' + account + (this.qrAmount ? '?amount=' + this.qrAmount.toString(10) : ''));
+      qrCode = await QRCode.toDataURL('badem:' + account + (this.qrAmount ? '?amount=' + this.qrAmount.toString(10) : ''));
     }
     this.qrCodeImage = qrCode;
   }
@@ -110,12 +110,12 @@ export class ReceiveComponent implements OnInit {
     this.qrAmount = null;
     let qrCode = null;
     if (amount !== '') {
-      if (this.util.account.isValidCevizAmount(amount)) {
-        this.qrAmount = this.util.ceviz.mcevizToRaw(amount);
+      if (this.util.account.isValidBademAmount(amount)) {
+        this.qrAmount = this.util.badem.mbademToRaw(amount);
       }
     }
     if (this.qrAccount.length > 1) {
-      qrCode = await QRCode.toDataURL('ceviz:' + this.qrAccount + (this.qrAmount ? '?amount=' + this.qrAmount.toString(10) : ''));
+      qrCode = await QRCode.toDataURL('badem:' + this.qrAccount + (this.qrAmount ? '?amount=' + this.qrAmount.toString(10) : ''));
       this.qrCodeImage = qrCode;
     }
   }
@@ -133,10 +133,10 @@ export class ReceiveComponent implements OnInit {
     }
     pendingBlock.loading = true;
 
-    const newBlock = await this.cevizBlock.generateReceive(walletAccount, sourceBlock, this.walletService.isLedgerWallet());
+    const newBlock = await this.bademBlock.generateReceive(walletAccount, sourceBlock, this.walletService.isLedgerWallet());
 
     if (newBlock) {
-      this.notificationService.sendSuccess(`Successfully received Ceviz!`);
+      this.notificationService.sendSuccess(`Successfully received Badem!`);
       // clear the list of pending blocks. Updated again with reloadBalances()
       this.walletService.clearPendingBlocks();
     } else {

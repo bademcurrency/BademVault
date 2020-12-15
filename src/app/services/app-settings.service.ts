@@ -27,8 +27,8 @@ export class AppSettingsService {
   storeKey = `nanovault-appsettings`;
 
   settings: AppSettings = {
-    displayDenomination: 'mceviz',
-    // displayPrefix: 'ceviz',
+    displayDenomination: 'mbadem',
+    // displayPrefix: 'badem',
     walletStore: 'localStorage',
     displayCurrency: '',
     defaultRepresentative: null,
@@ -54,26 +54,26 @@ export class AppSettingsService {
       shouldRandom: false,
     },
     {
-      name: 'Ceviz API 1',
-      value: 'ceviz',
-      api: 'https://ceviz-api.badem.io/proxy',
-      ws: 'wss://ceviz-ws.badem.io',
+      name: 'Badem API 1',
+      value: 'badem',
+      api: 'https://badem-api.badem.io/proxy',
+      ws: 'wss://badem-ws.badem.io',
       auth: null,
       shouldRandom: true,
     },
     {
-      name: 'Ceviz API 2',
-      value: 'ceviz',
-      api: 'https://ceviz-api-2.badem.io/proxy',
-      ws: 'wss://ceviz-ws-2.badem.io',
+      name: 'Badem API 2',
+      value: 'badem',
+      api: 'https://badem-api-2.badem.io/proxy',
+      ws: 'wss://badem-ws-2.badem.io',
       auth: null,
       shouldRandom: true,
     },
     {
-      name: 'Ceviz API 3',
-      value: 'ceviz',
-      api: 'https://ceviz-api-3.badem.io/proxy',
-      ws: 'wss://ceviz-ws-3.badem.io',
+      name: 'Badem API 3',
+      value: 'badem',
+      api: 'https://badem-api-3.badem.io/proxy',
+      ws: 'wss://badem-ws-3.badem.io',
       auth: null,
       shouldRandom: true,
     },
@@ -160,8 +160,8 @@ export class AppSettingsService {
   clearAppSettings() {
     localStorage.removeItem(this.storeKey);
     this.settings = {
-      displayDenomination: 'mceviz',
-      // displayPrefix: 'ceviz',
+      displayDenomination: 'mbadem',
+      // displayPrefix: 'badem',
       walletStore: 'localStorage',
       displayCurrency: '',
       defaultRepresentative: null,

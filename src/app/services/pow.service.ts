@@ -164,7 +164,7 @@ export class PowService {
    * Actual PoW functions
    */
   async getHashServer(hash, multiplier) {
-    const newThreshold = this.util.ceviz.difficultyFromMultiplier(multiplier, baseThreshold);
+    const newThreshold = this.util.badem.difficultyFromMultiplier(multiplier, baseThreshold);
     console.log('Generating work at threshold ' + newThreshold + ' using remote server', hash);
     return await this.api.workGenerate(hash)
     .then(work => work.work)
@@ -208,7 +208,7 @@ export class PowService {
     */
 
     // calculate threshold from multiplier
-    const newThreshold = this.util.ceviz.difficultyFromMultiplier(multiplier, baseThreshold);
+    const newThreshold = this.util.badem.difficultyFromMultiplier(multiplier, baseThreshold);
 
     const work = () => new Promise(resolve => {
       console.log('Generating work at threshold ' + newThreshold + ' using CPU workers for', hash);
@@ -244,7 +244,7 @@ export class PowService {
    * Generate PoW using WebGL
    */
   getHashWebGL(hash, multiplier) {
-    const newThreshold = this.util.ceviz.difficultyFromMultiplier(multiplier, baseThreshold);
+    const newThreshold = this.util.badem.difficultyFromMultiplier(multiplier, baseThreshold);
     console.log('Generating work at threshold ' + newThreshold + ' using WebGL for', hash);
 
     const response = this.getDeferredPromise();

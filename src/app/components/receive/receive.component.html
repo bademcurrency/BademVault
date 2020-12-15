@@ -1,7 +1,7 @@
 <div class="uk-animation-slide-left-small" uk-grid>
   <div class="uk-width-1-1">
 
-      <h2 class="uk-heading-divider">Receive Ceviz</h2>
+      <h2 class="uk-heading-divider">Receive Badem</h2>
 
       <div class="uk-width-1-1 nlt-page-intro">
         <p>
@@ -19,14 +19,14 @@
       <div class="uk-width-3-4@s">
         <select class="uk-select" [(ngModel)]="pendingAccountModel" (change)="changeQRAccount(pendingAccountModel)">
           <option [value]="0">All Accounts</option>
-          <option *ngFor="let account of accounts" [value]="account.id">{{account.addressBookName ? account.addressBookName + ' - ' : '#' + account.index + ' - ' }} {{ account.id | squeeze }} ({{ account.balance | ceviz: settings.settings.displayDenomination }})</option>
+          <option *ngFor="let account of accounts" [value]="account.id">{{account.addressBookName ? account.addressBookName + ' - ' : '#' + account.index + ' - ' }} {{ account.id | squeeze }} ({{ account.balance | badem: settings.settings.displayDenomination }})</option>
         </select>
       </div>
       <div class="uk-width-auto@s">
         <button class="uk-button uk-button-primary uk-width-1-1" (click)="getPending()"> Find Incoming</button>
       </div>
       <div *ngIf="qrCodeImage" class="uk-width-3-4@s narrow-div">
-        <input [(ngModel)]="receiveAmount" class="uk-input uk-margin-small-bottom" type="text" (ngModelChange)="changeQRAmount(receiveAmount)" title="Amount to be included in the QR and read by the sending wallet." placeholder="Optional Ceviz amount">
+        <input [(ngModel)]="receiveAmount" class="uk-input uk-margin-small-bottom" type="text" (ngModelChange)="changeQRAmount(receiveAmount)" title="Amount to be included in the QR and read by the sending wallet." placeholder="Optional Badem amount">
       </div>
       <div *ngIf="qrCodeImage" class="uk-width-1-1@s narrow-div">
         <img [src]="qrCodeImage" alt="QR code"><br>
@@ -77,7 +77,7 @@
                 </div>
               </td>
               <td *ngIf="block.account == pendingAccountModel || pendingAccountModel === '0'">
-                {{ block.amount | ceviz: settings.settings.displayDenomination }}
+                {{ block.amount | badem: settings.settings.displayDenomination }}
                 <div *ngIf="toBigNumber(block.amount).mod(nano).gt(0)">
                   <span *ngIf="toBigNumber(block.amount); let rawAmount" style="display: block; font-size: 12px;" class="uk-text-muted">+{{ rawAmount.mod(nano).toString(10) }} raw</span>
                 </div>
@@ -91,10 +91,10 @@
               <td colspan="4" style="text-align: center;">No incoming transactions</td>
             </tr>
             <tr *ngIf="pendingAccountModel === '0' && pendingBelowThreshold.length > 0 && pendingBelowThreshold[0].gt(0)">
-              <td colspan="4" style="text-align: center;">Some transactions ({{pendingBelowThreshold[0] | ceviz: settings.settings.displayDenomination}} total) were hidden due to a Minimum Receive Amount of {{minAmount | ceviz: settings.settings.displayDenomination}} <a routerLink="/configure-app" routerLinkActive="active">(configure)</a></td>
+              <td colspan="4" style="text-align: center;">Some transactions ({{pendingBelowThreshold[0] | badem: settings.settings.displayDenomination}} total) were hidden due to a Minimum Receive Amount of {{minAmount | badem: settings.settings.displayDenomination}} <a routerLink="/configure-app" routerLinkActive="active">(configure)</a></td>
             </tr>
             <tr *ngIf="pendingAccountModel !== '0' && walletAccount && walletAccount.pendingBelowThreshold.length > 0 && walletAccount.pendingBelowThreshold[0].gt(0)">
-              <td colspan="4" style="text-align: center;">Some transactions ({{walletAccount.pendingBelowThreshold[0] | ceviz: settings.settings.displayDenomination}} total) were hidden due to a Minimum Receive Amount of {{minAmount | ceviz: settings.settings.displayDenomination}} <a routerLink="/configure-app" routerLinkActive="active">(configure)</a></td>
+              <td colspan="4" style="text-align: center;">Some transactions ({{walletAccount.pendingBelowThreshold[0] | badem: settings.settings.displayDenomination}} total) were hidden due to a Minimum Receive Amount of {{minAmount | badem: settings.settings.displayDenomination}} <a routerLink="/configure-app" routerLinkActive="active">(configure)</a></td>
             </tr>
             <tr *ngIf="loadingIncomingTxList">
               <td colspan="4" style="text-align: center;"><span class="uk-margin-right" uk-spinner></span> Loading incoming transactions...</td>

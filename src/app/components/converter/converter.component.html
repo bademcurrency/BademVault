@@ -9,13 +9,13 @@
           <div class="uk-width-1-1 narrow-div">
             <div class="uk-form-horizontal">
               <div class="uk-margin">
-                <label class="uk-form-label" for="mceviz">CEVİZ <span uk-icon="icon: info;" uk-tooltip title="The main unit used in Ceviz wallets and exchanges."></span></label>
+                <label class="uk-form-label" for="mbadem">BADEM <span uk-icon="icon: info;" uk-tooltip title="The main unit used in Badem wallets and exchanges."></span></label>
                 <div class="uk-form-controls">
                   <div uk-grid>
                     <div class="uk-width-1-1">
                       <div class="uk-inline uk-width-1-1">
-                        <a class="uk-form-icon uk-form-icon-flip" ngxClipboard [cbContent]="Mceviz" (cbOnSuccess)="notifications.sendSuccess('Value Copied!')" uk-icon="icon: copy" title="Copy Value" uk-tooltip></a>
-                        <input [(ngModel)]="Mceviz" class="uk-input uk-margin-small-bottom" [ngClass]="{ 'uk-form-danger': invalidMceviz }" id="mceviz" type="text" (ngModelChange)="unitChange('mceviz')" placeholder="" autocomplete="off">
+                        <a class="uk-form-icon uk-form-icon-flip" ngxClipboard [cbContent]="Mbadem" (cbOnSuccess)="notifications.sendSuccess('Value Copied!')" uk-icon="icon: copy" title="Copy Value" uk-tooltip></a>
+                        <input [(ngModel)]="Mbadem" class="uk-input uk-margin-small-bottom" [ngClass]="{ 'uk-form-danger': invalidMbadem }" id="mbadem" type="text" (ngModelChange)="unitChange('mbadem')" placeholder="" autocomplete="off">
                       </div>
                     </div>
                   </div>
@@ -27,7 +27,7 @@
           <div class="uk-width-1-1 narrow-div">
             <div class="uk-form-horizontal">
               <div class="uk-margin">
-                <label class="uk-form-label" for="raw">raw <span uk-icon="icon: info;" uk-tooltip title="The smallest possible Ceviz unit"></span></label>
+                <label class="uk-form-label" for="raw">raw <span uk-icon="icon: info;" uk-tooltip title="The smallest possible Badem unit"></span></label>
                 <div class="uk-form-controls">
                 <div uk-grid>
                     <div class="uk-width-1-1">

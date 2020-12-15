@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
 
   wallet = this.walletService.wallet;
   node = this.nodeService.node;
-  cevizPrice = this.price.price;
+  bademPrice = this.price.price;
   fiatTimeout = 5 * 60 * 1000; // Update fiat prices every 5 minutes
   inactiveSeconds = 0;
   windowHeight = 1000;
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
 
     await this.walletService.reloadBalances(true);
 
-    // Workaround fix for github pages when CevizVault is refreshed (or externally linked) and there is a subpath for example to the send screen.
+    // Workaround fix for github pages when BademVault is refreshed (or externally linked) and there is a subpath for example to the send screen.
     // This data is saved from the 404.html page
     const path = localStorage.getItem('path');
 
@@ -135,11 +135,11 @@ export class AppComponent implements OnInit {
       this.walletService.lockWallet();
     });
 
-    // Listen for an ceviz: protocol link, triggered by the desktop application
+    // Listen for an badem: protocol link, triggered by the desktop application
     window.addEventListener('protocol-load', (e: CustomEvent) => {
       const protocolText = e.detail;
-      const stripped = protocolText.split('').splice(4).join(''); // Remove ceviz:
-      if (stripped.startsWith('ceviz_')) {
+      const stripped = protocolText.split('').splice(4).join(''); // Remove badem:
+      if (stripped.startsWith('badem_')) {
         this.router.navigate(['account', stripped]);
       }
       // Soon: Load seed, automatic send page?
@@ -162,7 +162,7 @@ export class AppComponent implements OnInit {
       if (!this.settings.settings.serverAPI) return;
       await this.updateFiatPrices();
     } catch (err) {
-      this.notifications.sendWarning(`There was an issue retrieving latest Ceviz price.  Ensure your AdBlocker is disabled on this page then reload to see accurate FIAT values.`, { length: 0, identifier: `price-adblock` });
+      this.notifications.sendWarning(`There was an issue retrieving latest Badem price.  Ensure your AdBlocker is disabled on this page then reload to see accurate FIAT values.`, { length: 0, identifier: `price-adblock` });
     }
   }
 
@@ -197,12 +197,12 @@ export class AppComponent implements OnInit {
     const searchData = this.searchData.trim();
     if (!searchData.length) return;
 
-    if (searchData.startsWith('ceviz_')) {
+    if (searchData.startsWith('badem_')) {
       this.router.navigate(['account', searchData]);
     } else if (searchData.length === 64) {
       this.router.navigate(['transaction', searchData]);
     } else {
-      this.notifications.sendWarning(`Invalid Ceviz account or transaction hash!`);
+      this.notifications.sendWarning(`Invalid Badem account or transaction hash!`);
     }
     this.searchData = '';
   }
@@ -217,7 +217,7 @@ export class AppComponent implements OnInit {
       return;
     }
     this.walletService.reloadBalances(true);
-    this.notifications.sendInfo(`Attempting to reconnect to Ceviz node`);
+    this.notifications.sendInfo(`Attempting to reconnect to Badem node`);
   }
 
   async updateFiatPrices() {

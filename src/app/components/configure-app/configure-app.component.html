@@ -1,6 +1,6 @@
 <div class="uk-animation-slide-left-small" uk-grid>
   <div class="uk-width-1-1">
-    <h2 class="uk-heading-divider">Configure CevizVault</h2>
+    <h2 class="uk-heading-divider">Configure BademVault</h2>
 
     <div class="uk-card uk-card-default uk-margin">
       <div class="uk-card-header">
@@ -28,7 +28,7 @@
             <!--<div class="uk-form-horizontal">-->
 
               <!--<div class="uk-margin">-->
-                <!--<label class="uk-form-label">Account Prefix <span uk-icon="icon: info;" uk-tooltip title="Change the Ceviz account prefix used throughout the application.  Both are valid when sending"></span></label>-->
+                <!--<label class="uk-form-label">Account Prefix <span uk-icon="icon: info;" uk-tooltip title="Change the Badem account prefix used throughout the application.  Both are valid when sending"></span></label>-->
                 <!--<div class="uk-form-controls">-->
 
                   <!--<div class="uk-inline uk-width-1-1">-->
@@ -128,7 +128,7 @@
             <div class="uk-form-horizontal">
 
               <div class="uk-margin">
-                <label class="uk-form-label">Min Receive [CEVİZ] <span uk-icon="icon: info;" uk-tooltip title="Minimum CEVİZ amount to receive. Transactions below this amount will be ignored by the wallet both for receiving and in the transaction list.  Set to blank or 0 to accept all transactions."></span></label>
+                <label class="uk-form-label">Min Receive [BADEM] <span uk-icon="icon: info;" uk-tooltip title="Minimum BADEM amount to receive. Transactions below this amount will be ignored by the wallet both for receiving and in the transaction list.  Set to blank or 0 to accept all transactions."></span></label>
                 <div class="uk-form-controls">
                   <div uk-grid>
                     <div class="uk-width-1-1">
@@ -199,7 +199,7 @@
             <div class="uk-form-horizontal">
 
               <div class="uk-margin">
-                <label class="uk-form-label" for="form-horizontal-select">Server Configuration <span uk-icon="icon: info;" uk-tooltip title="Change which server is used to communicate with the Ceviz network"></span></label>
+                <label class="uk-form-label" for="form-horizontal-select">Server Configuration <span uk-icon="icon: info;" uk-tooltip title="Change which server is used to communicate with the Badem network"></span></label>
                 <div class="uk-form-controls">
                   <select class="uk-select" [(ngModel)]="selectedServer" (change)="serverConfigChange(selectedServer)" id="form-horizontal-select">
                     <option *ngFor="let server of serverOptions" [value]="server.value">{{ server.name }}</option>
@@ -213,7 +213,7 @@
           <div class="uk-width-1-1" *ngIf="showServerValues()">
             <div class="uk-form-horizontal">
               <div class="">
-                <label class="uk-form-label uk-text-right">API Server <span uk-icon="icon: info;" uk-tooltip title="This server is used to load, cache, and enhance results from the Ceviz node"></span></label>
+                <label class="uk-form-label uk-text-right">API Server <span uk-icon="icon: info;" uk-tooltip title="This server is used to load, cache, and enhance results from the Badem node"></span></label>
                 <div class="uk-form-controls">
 
                   <div class="uk-inline uk-width-1-1" *ngIf="!showServerConfigs()">
@@ -222,7 +222,7 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverAPI" class="uk-input uk-margin-small-bottom" type="text" placeholder="https://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a valid <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">Ceviz RPC endpoint</a> or an API compliant with it.
+                      This has to be a valid <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">Badem RPC endpoint</a> or an API compliant with it.
                     </span>
                   </div>
                 </div>
@@ -242,7 +242,7 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverWS" class="uk-input uk-margin-small-bottom" id="form-horizontal-text2" type="text" placeholder="wss://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">Ceviz Node Websocket</a> or a WebSocket API compliant with it.<br>
+                      This has to be a <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">Badem Node Websocket</a> or a WebSocket API compliant with it.<br>
                       <i>Note: Since this server only notifies about new transactions, most of the wallet functions fine without it.</i>
                     </span>
                   </div>

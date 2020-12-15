@@ -6,7 +6,7 @@ import {ApiService} from '../../services/api.service';
 import {UtilService, TxType} from '../../services/util.service';
 import {WorkPoolService} from '../../services/work-pool.service';
 import {AppSettingsService} from '../../services/app-settings.service';
-import {CevizBlockService} from '../../services/nano-block.service';
+import {BademBlockService} from '../../services/nano-block.service';
 import * as nanocurrency from 'nanocurrency';
 import { wallet } from 'nanocurrency-web';
 import * as bip39 from 'bip39';
@@ -66,7 +66,7 @@ export class SweeperComponent implements OnInit {
     private api: ApiService,
     private workPool: WorkPoolService,
     public settings: AppSettingsService,
-    private cevizBlock: CevizBlockService,
+    private bademBlock: BademBlockService,
     private util: UtilService,
     private route: Router) {
       if (this.route.getCurrentNavigation().extras.state && this.route.getCurrentNavigation().extras.state.seed) {
@@ -219,7 +219,7 @@ export class SweeperComponent implements OnInit {
     // validate nano seed or private key
     if (key.length === 64) {
       if (nanocurrency.checkSeed(key)) {
-        return 'ceviz_seed';
+        return 'badem_seed';
       }
     }
     // validate bip39 seed
@@ -258,22 +258,22 @@ export class SweeperComponent implements OnInit {
       // create the block with the work found
       const block = nanocurrency.createBlock(privKey, {balance: '0', representative: this.representative,
       work: work, link: this.destinationAccount, previous: previous});
-      // replace ceviz with nano (old library)
-      block.block.account = block.block.account.replace('ceviz', 'ceviz');
-      block.block.link_as_account = block.block.link_as_account.replace('ceviz', 'ceviz');
+      // replace badem with nano (old library)
+      block.block.account = block.block.account.replace('badem', 'badem');
+      block.block.link_as_account = block.block.link_as_account.replace('badem', 'badem');
 
       // publish block for each iteration
       const data = await this.api.process(block.block, TxType.send);
       if (data.hash) {
         const blockInfo = await this.api.blockInfo(data.hash);
-        let cevizAmountSent = null;
+        let bademAmountSent = null;
         if (blockInfo.amount) {
-          cevizAmountSent = this.util.ceviz.rawToMceviz(blockInfo.amount);
-          this.totalSwept = this.util.big.add(this.totalSwept, cevizAmountSent);
+          bademAmountSent = this.util.badem.rawToMbadem(blockInfo.amount);
+          this.totalSwept = this.util.big.add(this.totalSwept, bademAmountSent);
         }
         this.notificationService.sendInfo('Account ' + address + ' was swept and ' +
-        (cevizAmountSent ? (cevizAmountSent.toString(10) + ' Ceviz') : '') + ' transferred to ' + this.destinationAccount, {length: 15000});
-        this.appendLog('Funds transferred ' + (cevizAmountSent ? ('(' + cevizAmountSent.toString(10) + ' Ceviz)') : '') + ': ' + data.hash);
+        (bademAmountSent ? (bademAmountSent.toString(10) + ' Badem') : '') + ' transferred to ' + this.destinationAccount, {length: 15000});
+        this.appendLog('Funds transferred ' + (bademAmountSent ? ('(' + bademAmountSent.toString(10) + ' Badem)') : '') + ': ' + data.hash);
         console.log(this.adjustedBalance + ' raw transferred to ' + this.destinationAccount);
       } else {
         this.notificationService.sendWarning(`Failed processing block.`);
@@ -308,9 +308,9 @@ export class SweeperComponent implements OnInit {
       // create the block with the work found
       const block = nanocurrency.createBlock(this.privKey, {balance: this.adjustedBalance, representative: this.representative,
       work: work, link: key, previous: this.previous});
-      // replace ceviz with nano (old library)
-      block.block.account = block.block.account.replace('ceviz', 'ceviz');
-      block.block.link_as_account = block.block.link_as_account.replace('ceviz', 'ceviz');
+      // replace badem with nano (old library)
+      block.block.account = block.block.account.replace('badem', 'badem');
+      block.block.link_as_account = block.block.link_as_account.replace('badem', 'badem');
       // new previous
       this.previous = block.hash;
 
@@ -356,7 +356,7 @@ export class SweeperComponent implements OnInit {
     // check for pending first
     let data = null;
     if (this.appSettings.settings.minimumReceive) {
-      const minAmount = this.util.ceviz.mcevizToRaw(this.appSettings.settings.minimumReceive).toString(10);
+      const minAmount = this.util.badem.mbademToRaw(this.appSettings.settings.minimumReceive).toString(10);
       if (this.appSettings.settings.pendingOption === 'amount') {
         data = await this.api.pendingLimitSorted(address, this.maxIncoming, minAmount);
       } else {
@@ -378,9 +378,9 @@ export class SweeperComponent implements OnInit {
       Object.keys(data.blocks).forEach(function(key) {
         raw = this.util.big.add(raw, data.blocks[key].amount);
       }.bind(this));
-      const cevizAmount = this.util.ceviz.rawToMceviz(raw);
-      const pending = {count: Object.keys(data.blocks).length, raw: raw, CEVIZ: cevizAmount, blocks: data.blocks};
-      const row = 'Found ' + pending.count + ' pending containing total ' + pending.CEVIZ + ' CEVİZ';
+      const bademAmount = this.util.badem.rawToMbadem(raw);
+      const pending = {count: Object.keys(data.blocks).length, raw: raw, BADEM: bademAmount, blocks: data.blocks};
+      const row = 'Found ' + pending.count + ' pending containing total ' + pending.BADEM + ' BADEM';
       this.appendLog(row);
 
       // create receive blocks for all pending
@@ -416,7 +416,7 @@ export class SweeperComponent implements OnInit {
     let balance = 0; // balance will be 0 if open block
     this.adjustedBalance = balance.toString();
     let previous = null; // previous is null if we create open block
-    this.representative = this.settings.settings.defaultRepresentative || this.cevizBlock.getRandomRepresentative();
+    this.representative = this.settings.settings.defaultRepresentative || this.bademBlock.getRandomRepresentative();
     let subType = 'open';
 
     // retrive from RPC
@@ -469,8 +469,8 @@ export class SweeperComponent implements OnInit {
       } else {
         // all private keys have been processed
         this.appendLog('Finished processing all accounts');
-        this.appendLog(this.totalSwept + ' Ceviz transferred');
-        this.notificationService.sendInfo('Finished processing all accounts. ' + this.totalSwept + ' Ceviz transferred', {length: 0});
+        this.appendLog(this.totalSwept + ' Badem transferred');
+        this.notificationService.sendInfo('Finished processing all accounts. ' + this.totalSwept + ' Badem transferred', {length: 0});
         this.sweeping = false;
       }
     }.bind(this));
@@ -497,7 +497,7 @@ export class SweeperComponent implements OnInit {
       }
 
       // nano seed or private key
-      if (keyType === 'ceviz_seed' || seed !== '' || keyType === 'bip39_seed') {
+      if (keyType === 'badem_seed' || seed !== '' || keyType === 'bip39_seed') {
         // check if a private key first (no index)
         this.appendLog('Checking if input is a private key');
         if (seed === '') { // seed from input, no mnemonic

@@ -89,11 +89,11 @@ export class RemoteSignService {
         (data.previous ? this.util.account.isValidAccount(data.previous.representative) : true) &&
         this.util.account.isValidAmount(data.block.balance) &&
         (data.previous ? this.util.account.isValidAmount(data.previous.balance) : true) &&
-        this.util.ceviz.isValidHash(data.block.previous) &&
-        (data.previous ? this.util.ceviz.isValidHash(data.previous.previous) : true) &&
-        this.util.ceviz.isValidHash(data.block.link) &&
-        (data.previous ? this.util.ceviz.isValidHash(data.previous.link) : true) &&
-        (data.previous ? this.util.ceviz.isValidSignature(data.previous.signature) : true));
+        this.util.badem.isValidHash(data.block.previous) &&
+        (data.previous ? this.util.badem.isValidHash(data.previous.previous) : true) &&
+        this.util.badem.isValidHash(data.block.link) &&
+        (data.previous ? this.util.badem.isValidHash(data.previous.link) : true) &&
+        (data.previous ? this.util.badem.isValidSignature(data.previous.signature) : true));
     } catch (error) {
       return false;
     }
@@ -102,8 +102,8 @@ export class RemoteSignService {
   checkProcessBlock(stringdata: string) {
     try {
       const data = JSON.parse(stringdata);
-      return (this.util.ceviz.isValidSignature(data.block.signature) &&
-        (data.block.work ? this.util.ceviz.isValidWork(data.block.work) : true));
+      return (this.util.badem.isValidSignature(data.block.signature) &&
+        (data.block.work ? this.util.badem.isValidWork(data.block.work) : true));
     } catch (error) {
       return false;
     }

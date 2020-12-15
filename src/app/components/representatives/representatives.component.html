@@ -45,7 +45,7 @@
                     <span *ngIf="rep.label">{{ rep.label }}</span> <span *ngIf="!rep.label"><app-nano-account-id [accountID]="rep.id" middle="on"></app-nano-account-id></span>
                   </div>
                   <div class="uk-width-1-4">
-                    {{ rep.delegatedWeight | ceviz: 'mceviz' }}
+                    {{ rep.delegatedWeight | badem: 'mbadem' }}
                   </div>
 
                 </div>
@@ -77,7 +77,7 @@
                   <select class="uk-select" [(ngModel)]="changeAccountID" (change)="newAccountID()" id="form-horizontal-select">
                     <option [value]="null">Select Accounts to Change</option>
                     <option [value]="'all'">All Current Accounts</option>
-                    <option *ngFor="let account of wallet.wallet.accounts" [value]="account.id">{{account.addressBookName ? account.addressBookName + ' - ' : '#' + account.index + ' - ' }} {{ account.id | squeeze }} ({{ account.balance | ceviz: settings.settings.displayDenomination }})</option>
+                    <option *ngFor="let account of wallet.wallet.accounts" [value]="account.id">{{account.addressBookName ? account.addressBookName + ' - ' : '#' + account.index + ' - ' }} {{ account.id | squeeze }} ({{ account.balance | badem: settings.settings.displayDenomination }})</option>
                   </select>
                   <ul class="uk-list uk-list-striped">
                     <li *ngFor="let account of selectedAccounts">

@@ -58,16 +58,16 @@ export class UtilService {
     generateSeedBytes: generateSeedBytes,
     getAccountPublicKey: getAccountPublicKey,
     isValidAccount: isValidAccount,
-    isValidCevizAmount: isValidCevizAmount,
+    isValidBademAmount: isValidBademAmount,
     isValidAmount: isValidAmount,
   };
-  ceviz = {
-    mcevizToRaw: mcevizToRaw,
-    kcevizToRaw: kcevizToRaw,
-    cevizToRaw: cevizToRaw,
-    rawToMceviz: rawToMceviz,
-    rawToKceviz: rawToKceviz,
-    rawToCeviz: rawToCeviz,
+  badem = {
+    mbademToRaw: mbademToRaw,
+    kbademToRaw: kbademToRaw,
+    bademToRaw: bademToRaw,
+    rawToMbadem: rawToMbadem,
+    rawToKbadem: rawToKbadem,
+    rawToBadem: rawToBadem,
     hashStateBlock: hashStateBlock,
     isValidSeed: isValidSeed,
     isValidHash: isValidHash,
@@ -268,7 +268,7 @@ function generateAccountKeyPair(accountSecretKeyBytes, expanded = false) {
   return nacl.sign.keyPair.fromSecretKey(accountSecretKeyBytes, expanded);
 }
 
-function getPublicAccountID(accountPublicKeyBytes, prefix = 'ceviz') {
+function getPublicAccountID(accountPublicKeyBytes, prefix = 'badem') {
   const accountHex = util.uint8.toHex(accountPublicKeyBytes);
   const keyBytes = util.uint4.toUint8(util.hex.toUint4(accountHex)); // For some reason here we go from u, to hex, to 4, to 8??
   const checksum = util.uint5.toString(util.uint4.toUint5(util.uint8.toUint4(blake.blake2b(keyBytes, null, 5).reverse())));
@@ -278,16 +278,16 @@ function getPublicAccountID(accountPublicKeyBytes, prefix = 'ceviz') {
 }
 
 function isValidAccount(account: string): boolean {
-  const re = /^ceviz_[13][0-13-9a-km-uw-z]{59}$/;
+  const re = /^badem_[13][0-13-9a-km-uw-z]{59}$/;
   return re.test(account);
 }
 
-// Check if a string is a numeric and larger than 0 but less than Ceviz supply
-function isValidCevizAmount(val: string) {
+// Check if a string is a numeric and larger than 0 but less than Badem supply
+function isValidBademAmount(val: string) {
   // numerics and last character is not a dot and number of dots is 0 or 1
   const isnum = /^-?\d*\.?\d*$/.test(val);
   if (isnum && String(val).slice(-1) !== '.') {
-    if (val !== '' && mcevizToRaw(val).gte(1) && nanocurrency.checkAmount(mcevizToRaw(val).toString(10))) {
+    if (val !== '' && mbademToRaw(val).gte(1) && nanocurrency.checkAmount(mbademToRaw(val).toString(10))) {
       return true;
     } else {
       return false;
@@ -304,11 +304,11 @@ function isValidAmount(val: string) {
 
 function getAccountPublicKey(account) {
   if (!isValidAccount(account)) {
-    throw new Error(`Invalid CEVİZ amount for the CEVİZ account`);
+    throw new Error(`Invalid BADEM amount for the BADEM account`);
   }
   const account_crop = account.length === 64 ? account.substring(4, 64) : account.substring(6, 66);
   const isValid = /^[13456789abcdefghijkmnopqrstuwxyz]+$/.test(account_crop);
-  if (!isValid) throw new Error(`Invalid CEVİZ account`);
+  if (!isValid) throw new Error(`Invalid BADEM account`);
 
   const key_uint4 = array_crop(uint5ToUint4(stringToUint5(account_crop.substring(0, 52))));
   const hash_uint4 = uint5ToUint4(stringToUint5(account_crop.substring(52, 60)));
@@ -323,30 +323,30 @@ function getAccountPublicKey(account) {
 /**
  * Conversion functions
  */
-const mceviz = 100;
-const kceviz = 100;
-const ceviz  = 1;
-function mcevizToRaw(value) {
-  return new BigNumber(value).times(mceviz);
+const mbadem = 100;
+const kbadem = 100;
+const badem  = 1;
+function mbademToRaw(value) {
+  return new BigNumber(value).times(mbadem);
 }
-function kcevizToRaw(value) {
-  return new BigNumber(value).times(kceviz);
+function kbademToRaw(value) {
+  return new BigNumber(value).times(kbadem);
 }
-function cevizToRaw(value) {
-  return new BigNumber(value).times(ceviz);
+function bademToRaw(value) {
+  return new BigNumber(value).times(badem);
 }
-function rawToMceviz(value) {
-  return new BigNumber(value).div(mceviz);
+function rawToMbadem(value) {
+  return new BigNumber(value).div(mbadem);
 }
-function rawToKceviz(value) {
-  return new BigNumber(value).div(kceviz);
+function rawToKbadem(value) {
+  return new BigNumber(value).div(kbadem);
 }
-function rawToCeviz(value) {
-  return new BigNumber(value).div(ceviz);
+function rawToBadem(value) {
+  return new BigNumber(value).div(badem);
 }
 
 /**
- * Ceviz functions
+ * Badem functions
  */
 function isValidSeed(val: string) {
   return nanocurrency.checkSeed(val);
@@ -473,16 +473,16 @@ const util = {
     generateSeedBytes: generateSeedBytes,
     getAccountPublicKey: getAccountPublicKey,
     isValidAccount: isValidAccount,
-    isValidCevizAmount: isValidCevizAmount,
-    isValidAmount: isValidCevizAmount,
+    isValidBademAmount: isValidBademAmount,
+    isValidAmount: isValidBademAmount,
   },
-  ceviz: {
-    mcevizToRaw: mcevizToRaw,
-    kcevizToRaw: kcevizToRaw,
-    cevizToRaw: cevizToRaw,
-    rawToMceviz: rawToMceviz,
-    rawToKceviz: rawToKceviz,
-    rawToCeviz: rawToCeviz,
+  badem: {
+    mbademToRaw: mbademToRaw,
+    kbademToRaw: kbademToRaw,
+    bademToRaw: bademToRaw,
+    rawToMbadem: rawToMbadem,
+    rawToKbadem: rawToKbadem,
+    rawToBadem: rawToBadem,
     hashStateBlock: hashStateBlock,
     isValidSeed: isValidSeed,
     isValidHash: isValidHash,

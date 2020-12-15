@@ -6,7 +6,7 @@ import * as url from 'url';
 import * as path from 'path';
 import { initialize } from './lib/ledger';
 
-app.setAsDefaultProtocolClient('ceviz'); // Register handler for ceviz: links
+app.setAsDefaultProtocolClient('badem'); // Register handler for ceviz: links
 
 // Initialize Ledger device detection
 initialize();

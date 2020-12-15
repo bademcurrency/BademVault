@@ -23,7 +23,7 @@ export const LedgerStatus = {
 
 export interface LedgerData {
   status: string;
-  ceviz: any|null;
+  badem: any|null;
   transport: any|null;
 }
 
@@ -41,7 +41,7 @@ export class LedgerService {
 
   ledger: LedgerData = {
     status: LedgerStatus.NOT_CONNECTED,
-    ceviz: null,
+    badem: null,
     transport: null,
   };
 
@@ -63,7 +63,7 @@ export class LedgerService {
   // Scraps binding to any existing transport/nano object
   resetLedger() {
     this.ledger.transport = null;
-    this.ledger.ceviz = null;
+    this.ledger.badem = null;
   }
 
   /**
@@ -262,15 +262,15 @@ export class LedgerService {
       }
 
       // Load nano object
-      if (!this.ledger.ceviz) {
+      if (!this.ledger.badem) {
         try {
-          this.ledger.ceviz = new Nano(this.ledger.transport);
+          this.ledger.badem = new Nano(this.ledger.transport);
         } catch (err) {
-          console.log(`Ceviz error: `, err);
+          console.log(`Badem error: `, err);
           if (err.statusText === 'UNKNOWN_ERROR') {
             this.resetLedger();
           }
-          this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Error loading Ceviz USB transport` });
+          this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Error loading Badem USB transport` });
           return resolve(false);
         }
       }
@@ -285,9 +285,9 @@ export class LedgerService {
         if (resolved) return;
         console.log(`Timeout expired, sending not connected`);
         this.ledger.status = LedgerStatus.NOT_CONNECTED;
-        this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Unable to detect Ceviz Ledger application (Timeout)` });
+        this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Unable to detect Badem Ledger application (Timeout)` });
         if (!hideNotifications) {
-          this.notifications.sendWarning(`Unable to connect to the Ledger device.  Make sure it is unlocked and the Ceviz application is open`);
+          this.notifications.sendWarning(`Unable to connect to the Ledger device.  Make sure it is unlocked and the Badem application is open`);
         }
         resolved = true;
         return resolve(false);
@@ -295,13 +295,13 @@ export class LedgerService {
 
       // Try to load the app config
       try {
-        const ledgerConfig = await this.ledger.ceviz.getAppConfiguration();
+        const ledgerConfig = await this.ledger.badem.getAppConfiguration();
         resolved = true;
 
         if (!ledgerConfig) return resolve(false);
         if (ledgerConfig && ledgerConfig.version) {
           this.ledger.status = LedgerStatus.LOCKED;
-          this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Ceviz app detected, but ledger is locked` });
+          this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Badem app detected, but ledger is locked` });
         }
       } catch (err) {
         console.log(`App config error: `, err);
@@ -309,7 +309,7 @@ export class LedgerService {
           this.resetLedger();
         }
         if (!hideNotifications && !resolved) {
-          this.notifications.sendWarning(`Ledger device locked.  Unlock and open the Ceviz application`);
+          this.notifications.sendWarning(`Ledger device locked.  Unlock and open the Badem application`);
         }
         return resolve(false);
       }
@@ -318,7 +318,7 @@ export class LedgerService {
       try {
         const accountDetails = await this.getLedgerAccount(0);
         this.ledger.status = LedgerStatus.READY;
-        this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Ceviz Ledger application connected` });
+        this.ledgerStatus$.next({ status: this.ledger.status, statusText: `Badem Ledger application connected` });
 
         if (!this.pollingLedger) {
           this.pollingLedger = true;
@@ -328,7 +328,7 @@ export class LedgerService {
         console.log(`Error on account details: `, err);
         if (err.statusCode === STATUS_CODES.SECURITY_STATUS_NOT_SATISFIED) {
           if (!hideNotifications) {
-            this.notifications.sendWarning(`Ledger device locked.  Unlock and open the Ceviz application`);
+            this.notifications.sendWarning(`Ledger device locked.  Unlock and open the Badem application`);
           }
         }
       }
@@ -364,7 +364,7 @@ export class LedgerService {
     if (this.isDesktop) {
       return await this.updateCacheDesktop(accountIndex, cacheData, blockData.contents.signature);
     } else {
-      return await this.ledger.ceviz.cacheBlock(this.ledgerPath(accountIndex), cacheData, blockData.contents.signature);
+      return await this.ledger.badem.cacheBlock(this.ledgerPath(accountIndex), cacheData, blockData.contents.signature);
     }
   }
 
@@ -383,7 +383,7 @@ export class LedgerService {
     if (this.isDesktop) {
       return await this.updateCacheDesktop(accountIndex, cacheData, blockData.signature);
     } else {
-      return await this.ledger.ceviz.cacheBlock(this.ledgerPath(accountIndex), cacheData, blockData.signature);
+      return await this.ledger.badem.cacheBlock(this.ledgerPath(accountIndex), cacheData, blockData.signature);
     }
   }
 
@@ -395,7 +395,7 @@ export class LedgerService {
       return this.signBlockDesktop(accountIndex, blockData);
     } else {
       this.ledger.transport.setExchangeTimeout(this.waitTimeout);
-      return await this.ledger.ceviz.signBlock(this.ledgerPath(accountIndex), blockData);
+      return await this.ledger.badem.signBlock(this.ledgerPath(accountIndex), blockData);
     }
   }
 
@@ -406,7 +406,7 @@ export class LedgerService {
   async getLedgerAccountWeb(accountIndex: number, showOnScreen = false) {
     this.ledger.transport.setExchangeTimeout(showOnScreen ? this.waitTimeout : this.normalTimeout);
     try {
-      return await this.ledger.ceviz.getAddress(this.ledgerPath(accountIndex), showOnScreen);
+      return await this.ledger.badem.getAddress(this.ledgerPath(accountIndex), showOnScreen);
     } catch (err) {
       throw err;
     }

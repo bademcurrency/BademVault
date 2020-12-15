@@ -10,7 +10,7 @@ import {WorkPoolService} from '../../services/work-pool.service';
 import {AppSettingsService} from '../../services/app-settings.service';
 import {ActivatedRoute} from '@angular/router';
 import {PriceService} from '../../services/price.service';
-import {CevizBlockService} from '../../services/nano-block.service';
+import {BademBlockService} from '../../services/nano-block.service';
 import { QrModalService } from '../../services/qr-modal.service';
 
 const nacl = window['nacl'];
@@ -21,7 +21,7 @@ const nacl = window['nacl'];
   styleUrls: ['./send.component.css']
 })
 export class SendComponent implements OnInit {
-  ceviz = 100;
+  badem = 100;
 
   activePanel = 'send';
 
@@ -31,9 +31,9 @@ export class SendComponent implements OnInit {
   addressBookMatch = '';
 
   amounts = [
-    { name: 'CEVIZ', shortName: 'CEVIZ', value: 'mceviz' },
-    { name: 'kceviz', shortName: 'kceviz', value: 'kceviz' },
-    { name: 'ceviz', shortName: 'ceviz', value: 'ceviz' },
+    { name: 'BADEM', shortName: 'BADEM', value: 'mbadem' },
+    { name: 'kbadem', shortName: 'kbadem', value: 'kbadem' },
+    { name: 'badem', shortName: 'badem', value: 'badem' },
   ];
   selectedAmount = this.amounts[0];
 
@@ -58,7 +58,7 @@ export class SendComponent implements OnInit {
     private addressBookService: AddressBookService,
     private notificationService: NotificationService,
     private nodeApi: ApiService,
-    private cevizBlock: CevizBlockService,
+    private bademBlock: BademBlockService,
     public price: PriceService,
     private workPool: WorkPoolService,
     public settings: AppSettingsService,
@@ -120,7 +120,7 @@ export class SendComponent implements OnInit {
     }
   }
 
-  // An update to the Ceviz amount, sync the fiat value
+  // An update to the Badem amount, sync the fiat value
   syncFiatPrice() {
     if (!this.validateAmount()) return;
     const rawAmount = this.getAmountBaseValue(this.amount || 0).plus(this.amountRaw);
@@ -133,24 +133,24 @@ export class SendComponent implements OnInit {
     const precision = this.settings.settings.displayCurrency === 'BTC' ? 1000000 : 100;
 
     // Determine fiat value of the amount
-    const fiatAmount = this.util.ceviz.rawToMceviz(rawAmount).times(this.price.price.lastPrice)
+    const fiatAmount = this.util.badem.rawToMbadem(rawAmount).times(this.price.price.lastPrice)
       .times(precision).floor().div(precision).toNumber();
 
     this.amountFiat = fiatAmount;
   }
 
   // An update to the fiat amount, sync the nano value based on currently selected denomination
-  syncCevizPrice() {
+  syncBademPrice() {
     if (!this.amountFiat) {
       this.amount = '';
       return;
     }
     if (!this.util.string.isNumeric(this.amountFiat)) return;
-    const rawAmount = this.util.ceviz.mcevizToRaw(new BigNumber(this.amountFiat).div(this.price.price.lastPrice));
-    const cevizVal = this.util.ceviz.rawToCeviz(rawAmount).floor();
-    const cevizAmount = this.getAmountValueFromBase(this.util.ceviz.cevizToRaw(cevizVal));
+    const rawAmount = this.util.badem.mbademToRaw(new BigNumber(this.amountFiat).div(this.price.price.lastPrice));
+    const bademVal = this.util.badem.rawToBadem(rawAmount).floor();
+    const bademAmount = this.getAmountValueFromBase(this.util.badem.bademToRaw(bademVal));
 
-    this.amount = cevizAmount.toNumber();
+    this.amount = bademAmount.toNumber();
   }
 
   searchAddressBook() {
@@ -199,7 +199,7 @@ export class SendComponent implements OnInit {
   }
 
   validateAmount() {
-    if (this.util.account.isValidCevizAmount(this.amount)) {
+    if (this.util.account.isValidBademAmount(this.amount)) {
       this.amountStatus = 1;
       return true;
     } else {
@@ -217,7 +217,7 @@ export class SendComponent implements OnInit {
       return this.notificationService.sendWarning(`From and to account are required`);
     }
     if (!this.validateAmount()) {
-      return this.notificationService.sendWarning(`Invalid CEVİZ Amount`);
+      return this.notificationService.sendWarning(`Invalid BADEM Amount`);
     }
 
     const from = await this.nodeApi.accountInfo(this.fromAccountID);
@@ -235,20 +235,20 @@ export class SendComponent implements OnInit {
     const rawAmount = this.getAmountBaseValue(this.amount || 0);
     this.rawAmount = rawAmount.plus(this.amountRaw);
 
-    const cevizAmount = this.rawAmount.div(this.ceviz);
+    const bademAmount = this.rawAmount.div(this.badem);
 
     if (this.amount < 0 || rawAmount.lessThan(0)) {
       return this.notificationService.sendWarning(`Amount is invalid`);
     }
     if (from.balanceBN.minus(rawAmount).lessThan(0)) {
-      return this.notificationService.sendError(`From account does not have enough CEVİZ`);
+      return this.notificationService.sendError(`From account does not have enough BADEM`);
     }
 
     // Determine a proper raw amount to show in the UI, if a decimal was entered
-    this.amountRaw = this.rawAmount.mod(this.ceviz);
+    this.amountRaw = this.rawAmount.mod(this.badem);
 
     // Determine fiat value of the amount
-    this.amountFiat = this.util.ceviz.rawToMceviz(rawAmount).times(this.price.price.lastPrice).toNumber();
+    this.amountFiat = this.util.badem.rawToMbadem(rawAmount).times(this.price.price.lastPrice).toNumber();
 
     // Start precopmuting the work...
     this.fromAddressBook = this.addressBookService.getAccountName(this.fromAccountID);
@@ -270,7 +270,7 @@ export class SendComponent implements OnInit {
     this.confirmingTransaction = true;
 
     try {
-      const newHash = await this.cevizBlock.generateSend(walletAccount, this.toAccountID,
+      const newHash = await this.bademBlock.generateSend(walletAccount, this.toAccountID,
         this.rawAmount, this.walletService.isLedgerWallet());
       if (newHash) {
         this.notificationService.sendSuccess(`Successfully sent ${this.amount} ${this.selectedAmount.shortName}!`);
@@ -306,8 +306,8 @@ export class SendComponent implements OnInit {
 
     this.amountRaw = walletAccount.balanceRaw;
 
-    const cevizVal = this.util.ceviz.rawToCeviz(walletAccount.balance).floor();
-    const maxAmount = this.getAmountValueFromBase(this.util.ceviz.cevizToRaw(cevizVal));
+    const bademVal = this.util.badem.rawToBadem(walletAccount.balance).floor();
+    const maxAmount = this.getAmountValueFromBase(this.util.badem.bademToRaw(bademVal));
     this.amount = maxAmount.toNumber();
     this.syncFiatPrice();
   }
@@ -320,18 +320,18 @@ export class SendComponent implements OnInit {
 
     switch (this.selectedAmount.value) {
       default:
-      case 'ceviz': return this.util.ceviz.cevizToRaw(value);
-      case 'kceviz': return this.util.ceviz.kcevizToRaw(value);
-      case 'mceviz': return this.util.ceviz.mcevizToRaw(value);
+      case 'badem': return this.util.badem.bademToRaw(value);
+      case 'kbadem': return this.util.badem.kbademToRaw(value);
+      case 'mbadem': return this.util.badem.mbademToRaw(value);
     }
   }
 
   getAmountValueFromBase(value) {
     switch (this.selectedAmount.value) {
       default:
-      case 'ceviz': return this.util.ceviz.rawToCeviz(value);
-      case 'kceviz': return this.util.ceviz.rawToKceviz(value);
-      case 'mceviz': return this.util.ceviz.rawToMceviz(value);
+      case 'badem': return this.util.badem.rawToBadem(value);
+      case 'kbadem': return this.util.badem.rawToKbadem(value);
+      case 'mbadem': return this.util.badem.rawToMbadem(value);
     }
   }
 

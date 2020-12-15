@@ -44,11 +44,11 @@ export class ConfigureWalletComponent implements OnInit {
 
   selectedImportOption = 'seed';
   importOptions = [
-    { name: 'Ceviz Seed', value: 'seed' },
-    { name: 'Ceviz Mnemonic Phrase', value: 'mnemonic' },
+    { name: 'Badem Seed', value: 'seed' },
+    { name: 'Badem Mnemonic Phrase', value: 'mnemonic' },
     { name: 'BIP39 Mnemonic Phrase', value: 'bip39-mnemonic' },
-    { name: 'CevizVault Wallet File', value: 'file' },
-    { name: 'Ledger Ceviz S / Ceviz X', value: 'ledger' },
+    { name: 'BademVault Wallet File', value: 'file' },
+    { name: 'Ledger Nano S / Badem X', value: 'ledger' },
     { name: 'Private Key', value: 'privateKey' },
     { name: 'Expanded Private Key', value: 'expandedKey' },
   ];
@@ -124,7 +124,7 @@ export class ConfigureWalletComponent implements OnInit {
     }
 
     if (this.ledger.status === LedgerStatus.LOCKED) {
-      return this.notifications.sendWarning(`Unlock your ledger device and open the Ceviz app to continue`);
+      return this.notifications.sendWarning(`Unlock your ledger device and open the Badem app to continue`);
     }
 
     if (refreshOnly) {
@@ -158,10 +158,10 @@ export class ConfigureWalletComponent implements OnInit {
 
     const UIkit = window['UIkit'];
     try {
-      await UIkit.modal.confirm('<p style="text-align: center;"><span style="font-size: 18px;">You are about to create a new wallet<br>which will <b>reset the local CevizVault wallet you already have</b></span><br><br><b style="font-size: 18px;">Be sure you have saved your current Ceviz seed and/or mnemonic before continuing</b><br><br>Without a backup - <b>ALL FUNDS WILL BE UNRECOVERABLE</b><br/><br/></p>');
+      await UIkit.modal.confirm('<p style="text-align: center;"><span style="font-size: 18px;">You are about to create a new wallet<br>which will <b>reset the local BademVault wallet you already have</b></span><br><br><b style="font-size: 18px;">Be sure you have saved your current Badem seed and/or mnemonic before continuing</b><br><br>Without a backup - <b>ALL FUNDS WILL BE UNRECOVERABLE</b><br/><br/></p>');
       return true;
     } catch (err) {
-      this.notifications.sendInfo(`You can use the 'Manage Wallet' page to back up your Ceviz seed and/or mnemonic`);
+      this.notifications.sendInfo(`You can use the 'Manage Wallet' page to back up your Badem seed and/or mnemonic`);
       return false;
     }
   }
@@ -368,7 +368,7 @@ export class ConfigureWalletComponent implements OnInit {
     let invalid = false;
     if (this.util.string.isNumeric(index) && index % 1 === 0) {
       index = parseInt(index, 10);
-      if (!this.util.ceviz.isValidIndex(index)) {
+      if (!this.util.badem.isValidIndex(index)) {
         invalid = true;
       }
       if (index > INDEX_MAX) {

@@ -39,9 +39,9 @@ export class ConfigureAppComponent implements OnInit {
   wallet = this.walletService.wallet;
 
   denominations = [
-    { name: 'CEVIZ', value: 'mceviz' },
-    { name: 'kceviz', value: 'kceviz' },
-    { name: 'ceviz', value: 'ceviz' },
+    { name: 'BADEM', value: 'mbadem' },
+    { name: 'kbadem', value: 'kbadem' },
+    { name: 'badem', value: 'badem' },
   ];
   selectedDenomination = this.denominations[0].value;
 
@@ -104,7 +104,7 @@ export class ConfigureAppComponent implements OnInit {
     { name: 'Best Option Available', value: 'best' },
     { name: 'Client Side - WebGL [Recommended] (Chrome/Firefox)', value: 'clientWebGL' },
     { name: 'Client Side - CPU', value: 'clientCPU' },
-    { name: 'Server - CevizVault Server', value: 'server' },
+    { name: 'Server - BademVault Server', value: 'server' },
   ];
   selectedPoWOption = this.powOptions[0].value;
 
@@ -116,8 +116,8 @@ export class ConfigureAppComponent implements OnInit {
   selectedPendingOption = this.pendingOptions[0].value;
 
   // prefixOptions = [
-  //   { name: 'ceviz_', value: 'ceviz' },
-  //   { name: 'ceviz_', value: 'ceviz' },
+  //   { name: 'badem_', value: 'badem' },
+  //   { name: 'badem_', value: 'badem' },
   // ];
   // selectedPrefix = this.prefixOptions[0].value;
 
@@ -183,8 +183,8 @@ export class ConfigureAppComponent implements OnInit {
 
     try {
       const quorumData = await this.api.confirmationQuorum();
-      this.peersStakeReq = quorumData ? Number(this.util.ceviz.rawToMceviz(quorumData.peers_stake_required)).toLocaleString('en-US') : null;
-      this.peersStakeTotal = quorumData ? Number(this.util.ceviz.rawToMceviz(quorumData.peers_stake_total)).toLocaleString('en-US') : null;
+      this.peersStakeReq = quorumData ? Number(this.util.badem.rawToMbadem(quorumData.peers_stake_required)).toLocaleString('en-US') : null;
+      this.peersStakeTotal = quorumData ? Number(this.util.badem.rawToMbadem(quorumData.peers_stake_total)).toLocaleString('en-US') : null;
     } catch {console.warn('Failed to get node stats: confirmation quorum'); }
 
     try {
@@ -247,7 +247,7 @@ export class ConfigureAppComponent implements OnInit {
     let newPoW = this.selectedPoWOption;
     const pendingOption = this.selectedPendingOption;
     let minReceive = null;
-    if (this.util.account.isValidCevizAmount(this.minimumReceive)) {
+    if (this.util.account.isValidBademAmount(this.minimumReceive)) {
       minReceive = this.minimumReceive;
     }
 
@@ -415,7 +415,7 @@ export class ConfigureAppComponent implements OnInit {
   async clearWalletData() {
     const UIkit = window['UIkit'];
     try {
-      await UIkit.modal.confirm('<p style="text-align: center;">You are about to delete all of your wallet data stored in CevizVault!<br><b>Make sure you have your seed and/or mnemonic backed up!!</b><br><br><b>Are you sure?</b></p>');
+      await UIkit.modal.confirm('<p style="text-align: center;">You are about to delete all of your wallet data stored in BademVault!<br><b>Make sure you have your seed and/or mnemonic backed up!!</b><br><br><b>Are you sure?</b></p>');
       this.walletService.resetWallet();
       this.walletService.removeWalletData();
 
@@ -426,7 +426,7 @@ export class ConfigureAppComponent implements OnInit {
   async clearAllData() {
     const UIkit = window['UIkit'];
     try {
-      await UIkit.modal.confirm('<p style="text-align: center;">You are about to delete all your data stored in CevizVault and reset all settings.<br>This includes all of your wallet data and address book!<br><br><b>Make sure you have your seed and/or mnemonic backed up!!</b><br><br><b>Are you sure?</b></p>');
+      await UIkit.modal.confirm('<p style="text-align: center;">You are about to delete all your data stored in BademVault and reset all settings.<br>This includes all of your wallet data and address book!<br><br><b>Make sure you have your seed and/or mnemonic backed up!!</b><br><br><b>Are you sure?</b></p>');
       this.walletService.resetWallet();
       this.walletService.removeWalletData();
 
@@ -439,7 +439,7 @@ export class ConfigureAppComponent implements OnInit {
 
       this.notifications.sendSuccess(`Successfully deleted locally stored data and reset the settings!`);
 
-      // Get a new random API server or CevizVault will get stuck in offline mode
+      // Get a new random API server or BademVault will get stuck in offline mode
       this.updateServerSettings();
     } catch (err) {}
   }

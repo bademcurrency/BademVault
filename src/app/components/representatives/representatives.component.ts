@@ -8,7 +8,7 @@ import {
   ApiService,
   AppSettingsService,
   FullRepresentativeOverview,
-  CevizBlockService,
+  BademBlockService,
   NotificationService,
   RepresentativeService,
   UtilService,
@@ -54,7 +54,7 @@ export class RepresentativesComponent implements OnInit {
     public wallet: WalletService,
     private api: ApiService,
     private notifications: NotificationService,
-    private cevizBlock: CevizBlockService,
+    private bademBlock: BademBlockService,
     private util: UtilService,
     private representativeService: RepresentativeService,
     public settings: AppSettingsService,
@@ -269,7 +269,7 @@ export class RepresentativesComponent implements OnInit {
       }
 
       try {
-        const changed = await this.cevizBlock.generateChange(walletAccount, newRep, this.wallet.isLedgerWallet());
+        const changed = await this.bademBlock.generateChange(walletAccount, newRep, this.wallet.isLedgerWallet());
         if (!changed) {
           this.notifications.sendError(`Error changing representative for ${account.id}, please try again`);
         }

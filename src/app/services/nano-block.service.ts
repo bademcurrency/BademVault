@@ -11,12 +11,12 @@ import {BehaviorSubject} from 'rxjs';
 const nacl = window['nacl'];
 
 @Injectable()
-export class CevizBlockService {
+export class BademBlockService {
   representativeAccounts = [
-    'ceviz_3mh5qkrwhf9p6ppk5ci5yyoq9t5jhnfy4mm9fkwxeda9noxjc73imwb5bzhm', // Representative 1
-    'ceviz_385hcwzmm5dn5nrmu1opayeeqrgwihh3k3tezpgc91keac6bf76wmp8sqrd1', // Representative 2
-    'ceviz_3gbpjit54j98kad1hqmg6w4eeroqyayi7cb6nkthhy6u9bgczy784psmk9ky', // Representative 3
-    'ceviz_3aup3wfzrdg14mze8nkj96rkm774tdiapfw3nr7sa7e4zc443rrq7bw34au5', // Representative 4
+    'badem_33zto317ffjjqssnd4z186mrfrn6t6tuwxuxyqd4drpwx3ymzq9y1mt16h13', // Representative 1
+    'badem_39djjm4fmwko4yayxmsqsfzrsbxkri8ocwcp44m88y9ekzsw3q76zaooogie', // Representative 2
+    'badem_1777re9rpkmgxsgrj1qx47yt6rd1fx6sjb9xmqcq6kxkthc795tf9hj8c7yk', // Representative 3
+    'badem_3i1ytwxnb6it4knde5p6t9bwaaw4wurm6zrhqb1rqf3ig43yn3urkqtau6wc', // Representative 4
   ];
 
   zeroHash = '0000000000000000000000000000000000000000000000000000000000000000';
@@ -398,14 +398,14 @@ export class CevizBlockService {
     if (blockData.contents.type !== 'state') {
       throw new Error(`Frontier block wasn't a state block, which shouldn't be possible`);
     }
-    if (this.util.hex.fromUint8(this.util.ceviz.hashStateBlock(blockData.contents)) !== accountInfo.frontier) {
+    if (this.util.hex.fromUint8(this.util.badem.hashStateBlock(blockData.contents)) !== accountInfo.frontier) {
       throw new Error(`Frontier hash didn't match block data`);
     }
   }
 
   // Sign a state block, and insert the signature into the block.
   signStateBlock(walletAccount, blockData) {
-    const hashBytes = this.util.ceviz.hashStateBlock(blockData);
+    const hashBytes = this.util.badem.hashStateBlock(blockData);
     const privKey = walletAccount.keyPair.secretKey;
     const signed = nacl.sign.detached(hashBytes, privKey, walletAccount.keyPair.expanded);
     blockData.signature = this.util.hex.fromUint8(signed);

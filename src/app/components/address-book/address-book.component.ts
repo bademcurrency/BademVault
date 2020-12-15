@@ -135,7 +135,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
   }
 
   exportAddressBookToFile() {
-    const fileName = `CevizVault-AddressBook.json`;
+    const fileName = `BademVault-AddressBook.json`;
 
     const exportData = this.addressBookService.addressBook;
     this.triggerFileDownload(fileName, exportData);
@@ -155,7 +155,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
       try {
         const importData = JSON.parse(fileData);
         if (!importData.length || !importData[0].account) {
-          return this.notificationService.sendError(`Bad import data, make sure you selected a CevizVault Address Book export`);
+          return this.notificationService.sendError(`Bad import data, make sure you selected a BademVault Address Book export`);
         }
 
         const encoded = btoa(JSON.stringify(importData));

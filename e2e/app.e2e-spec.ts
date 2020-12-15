@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('CevizVault App', () => {
+describe('BademVault App', () => {
   let page: AppPage;
 
   beforeEach(() => {

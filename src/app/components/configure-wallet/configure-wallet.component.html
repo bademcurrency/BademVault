@@ -2,7 +2,7 @@
 <p *ngIf="activePanel === panels.create || activePanel === panels.import">Use the options below to import an existing wallet or create a new one</p>
 
 <div *ngIf="isConfigured() && (activePanel === panels.create || activePanel === panels.import)" class="uk-alert uk-alert-danger">
-  <b>You already have a local CevizVault wallet configured</b><br>
+  <b>You already have a local BademVault wallet configured</b><br>
   Before going any further, be 100% certain you have backed up the seed to your current wallet!<br>
   Without it, <b>any funds you have will become completely unrecoverable!</b>
 </div>
@@ -19,8 +19,8 @@
 <div class="uk-card uk-card-default" *ngIf="activePanel === panels.create">
   <div class="uk-card-body">
     <p>
-      When you create a new wallet, a new Ceviz seed will be generated which can be used to create brand new accounts
-      on the Ceviz network.  Your Ceviz seed is the master key to all of your accounts and any money inside of them!
+      When you create a new wallet, a new Badem seed will be generated which can be used to create brand new accounts
+      on the Badem network.  Your Badem seed is the master key to all of your accounts and any money inside of them!
     </p>
     <div class="uk-alert-primary" uk-alert>
       <p>Make sure you back up your seed, write it down, and keep it incredibly safe! All funds inside can be lost without it!</p>
@@ -34,7 +34,7 @@
 <div class="uk-card uk-card-default" *ngIf="activePanel === panels.import">
   <div class="uk-card-body">
     <p>
-      If you already have a Ceviz wallet, you can import it below.  When you import a wallet, it replaces the previous one in the GUI but none of your existing
+      If you already have a Badem wallet, you can import it below.  When you import a wallet, it replaces the previous one in the GUI but none of your existing
       accounts are affected since the wallet can be restored simply by importing it again. The seed is not stored anywhere besides in your local client so please make sure you have it stored elsewhere.  Use the drop
       down below to select which type of import you want to use.
     </p>
@@ -58,25 +58,25 @@
     <div uk-grid *ngIf="selectedImportOption === 'file'">
       <div class="uk-width-1-1">
         <p>
-          If you have saved your wallet to a file using CevizVault before, use the button below to import it.
+          If you have saved your wallet to a file using BademVault before, use the button below to import it.
         </p>
       </div>
     </div>
     <div uk-grid *ngIf="selectedImportOption === 'seed'" class="uk-margin-top">
       <div class="uk-width-1-1">
         <p>
-          Enter your seed from any Ceviz wallet to import it below.
+          Enter your seed from any Badem wallet to import it below.
         </p>
         <div class="uk-inline uk-width-1-1">
           <a class="uk-form-icon uk-form-icon-flip" uk-icon="icon: camera" (click)="openQR('seed1','hash')" uk-tooltip title="Scan from QR code"></a>
-          <input type="text" class="uk-input" (keyup.enter)="importExistingWallet()" [(ngModel)]="importSeedModel" placeholder="64 character Ceviz Backup Seed">
+          <input type="text" class="uk-input" (keyup.enter)="importExistingWallet()" [(ngModel)]="importSeedModel" placeholder="64 character Badem Backup Seed">
         </div>
       </div>
     </div>
     <div uk-grid *ngIf="selectedImportOption === 'mnemonic'" class="uk-margin-top">
       <div class="uk-width-1-1">
         <p>
-          Enter your mnemonic generated from CevizVault or other Ceviz wallets. If it came from a Ledger device or certain multi-currency wallets, use "BIP39 Mnemonic" import type instead.
+          Enter your mnemonic generated from BademVault or other Badem wallets. If it came from a Ledger device or certain multi-currency wallets, use "BIP39 Mnemonic" import type instead.
         </p>
         <div class="uk-inline uk-width-1-1">
           <a class="uk-form-icon uk-form-icon-flip" uk-icon="icon: camera" (click)="openQR('mnemo1','mnemonic')" uk-tooltip title="Scan from QR code"></a>
@@ -87,7 +87,7 @@
     <div uk-grid *ngIf="selectedImportOption === 'bip39-mnemonic'" class="uk-margin-top">
       <div class="uk-width-1-1">
         <p>
-          Enter your mnemonic generated from a Ledger device or certain multi-currency wallets. If it was generated in CevizVault, use "Ceviz Mnemonic" import type instead.
+          Enter your mnemonic generated from a Ledger device or certain multi-currency wallets. If it was generated in BademVault, use "Badem Mnemonic" import type instead.
         </p>
         <div class="uk-form-horizontal">
           <div class="uk-margin">
@@ -121,12 +121,12 @@
     <div uk-grid *ngIf="selectedImportOption === 'ledger'" class="uk-margin-top">
       <div class="uk-width-1-1">
         <p>
-          Make sure you have the Ceviz app installed, then connect your ledger device via USB. <a href="https://docs.nault.cc/2020/08/04/ledger-guide.html" target="_blank" rel="noopener noreferrer">Ledger/CevizVault User Guide</a><br>
+          Make sure you have the Badem app installed, then connect your ledger device via USB. <a href="https://docs.nault.cc/2020/08/04/ledger-guide.html" target="_blank" rel="noopener noreferrer">Ledger/BademVault User Guide</a><br>
           <br>
         </p>
         <div *ngIf="ledger.status === ledgerStatus.NOT_CONNECTED" class="uk-alert uk-alert-warning">
           <b>Ledger Device Not Connected</b><br>
-          Connect your ledger device via USB and make sure you have the Ceviz app installed, then press the button below to retry
+          Connect your ledger device via USB and make sure you have the Badem app installed, then press the button below to retry
         </div>
         <div *ngIf="ledger.status === ledgerStatus.LOCKED" class="uk-alert uk-alert-warning">
           <b>Ledger Device Locked</b><br>
@@ -141,11 +141,11 @@
     <div uk-grid *ngIf="selectedImportOption === 'privateKey'" class="uk-margin-top">
       <div class="uk-width-1-1">
         <p>
-          Enter your Ceviz private key below. These are not to be confused with Ceviz seeds, which are more common, and produce many private keys.
+          Enter your Badem private key below. These are not to be confused with Badem seeds, which are more common, and produce many private keys.
         </p>
         <div class="uk-inline uk-width-1-1">
           <a class="uk-form-icon uk-form-icon-flip" uk-icon="icon: camera" (click)="openQR('priv1','hash')" uk-tooltip title="Scan from QR code"></a>
-          <input type="text" class="uk-input" (keyup.enter)="importSingleKeyWallet()" [(ngModel)]="importPrivateKeyModel" placeholder="64 character Ceviz Private Key">
+          <input type="text" class="uk-input" (keyup.enter)="importSingleKeyWallet()" [(ngModel)]="importPrivateKeyModel" placeholder="64 character Badem Private Key">
         </div>
       </div>
     </div>
@@ -156,7 +156,7 @@
         </p>
         <div class="uk-inline uk-width-1-1">
           <a class="uk-form-icon uk-form-icon-flip" uk-icon="icon: camera" (click)="openQR('expanded1','hash')" uk-tooltip title="Scan from QR code"></a>
-          <input type="text" class="uk-input" (keyup.enter)="importSingleKeyWallet()" [(ngModel)]="importExpandedKeyModel" placeholder="64 or 128 character Ceviz Expanded Private Key">
+          <input type="text" class="uk-input" (keyup.enter)="importSingleKeyWallet()" [(ngModel)]="importExpandedKeyModel" placeholder="64 or 128 character Badem Expanded Private Key">
         </div>
       </div>
     </div>
@@ -193,7 +193,7 @@
     <br>
 
     <div uk-grid>
-      <div class="uk-width-1-4">Ceviz Seed</div>
+      <div class="uk-width-1-4">Badem Seed</div>
       <div class="uk-width-3-4 uk-text-truncate">
         {{ newWalletSeed }}<br>
         <a title="Copy Seed To Clipboard" ngxClipboard [cbContent]="newWalletSeed" (cbOnSuccess)="copied()" uk-tooltip>Copy seed to clipboard</a>
@@ -204,7 +204,7 @@
 
     <div uk-grid>
       <div class="uk-width-1-4@m">
-        Ceviz Mnemonic<br>
+        Badem Mnemonic<br>
       </div>
       <div class="uk-width-3-4@m">
         <pre class="mne-box"><span *ngFor="let line of newWalletMnemonicLines; let l = index" class="mne-cont"><span *ngFor="let word of line; let i = index" class="mne-word"><span class="mne-num">{{ (l * 4) + i + 1 }}</span> {{ word }}</span></span></pre>
@@ -256,7 +256,7 @@
   </div>
   <div class="uk-card-body">
     <p>
-      Your wallet has been created and you are ready to send and receive Ceviz!<br>
+      Your wallet has been created and you are ready to send and receive Badem!<br>
       It will lock after a certain amount of inactivity which can be changed in the <a routerLink="/configure-app" routerLinkActive="active">app settings</a>.
     </p>
   </div>

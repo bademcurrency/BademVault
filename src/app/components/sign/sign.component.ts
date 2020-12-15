@@ -8,7 +8,7 @@ import {UtilService, StateBlock, TxType} from '../../services/util.service';
 import {WorkPoolService} from '../../services/work-pool.service';
 import {AppSettingsService} from '../../services/app-settings.service';
 import {ActivatedRoute} from '@angular/router';
-import {CevizBlockService} from '../../services/nano-block.service';
+import {BademBlockService} from '../../services/nano-block.service';
 import {ApiService} from '../../services/api.service';
 import * as QRCode from 'qrcode';
 import * as bip39 from 'bip39';
@@ -81,7 +81,7 @@ export class SignComponent implements OnInit {
     private walletService: WalletService,
     private addressBookService: AddressBookService,
     private notificationService: NotificationService,
-    private cevizBlock: CevizBlockService,
+    private bademBlock: BademBlockService,
     private workPool: WorkPoolService,
     public settings: AppSettingsService,
     private api: ApiService,
@@ -156,7 +156,7 @@ export class SignComponent implements OnInit {
           return this.notificationService.sendError(`Meaningless block. The balance and representative are unchanged!`, {length: 0});
         }
 
-        this.amount = this.util.ceviz.rawToMceviz(this.rawAmount).toString(10);
+        this.amount = this.util.badem.rawToMbadem(this.rawAmount).toString(10);
         this.prepareTransaction();
       } else if (!this.previousBlock && this.verifyBlock(this.currentBlock)) {
         // No previous block present (open block)
@@ -184,7 +184,7 @@ export class SignComponent implements OnInit {
           return this.notificationService.sendError(`Only OPEN block is currently supported when previous block is missing`, {length: 0});
         }
 
-        this.amount = this.util.ceviz.rawToMceviz(this.rawAmount).toString(10);
+        this.amount = this.util.badem.rawToMbadem(this.rawAmount).toString(10);
         this.prepareTransaction();
       } else {
         return;
@@ -201,8 +201,8 @@ export class SignComponent implements OnInit {
     if (this.util.account.isValidAccount(block.account) &&
       this.util.account.isValidAccount(block.representative) &&
       this.util.account.isValidAmount(block.balance) &&
-      this.util.ceviz.isValidHash(block.previous) &&
-      this.util.ceviz.isValidHash(block.link)) {
+      this.util.badem.isValidHash(block.previous) &&
+      this.util.badem.isValidHash(block.link)) {
       return true;
     } else {
       this.notificationService.sendError(`The provided blocks contain invalid values!`, {length: 0});
@@ -213,7 +213,7 @@ export class SignComponent implements OnInit {
   verifyBlockHash(currentBlock: StateBlock, previousBlock: StateBlock) {
     const block: StateBlock = {account: previousBlock.account, link: previousBlock.link, previous: previousBlock.previous,
       representative: previousBlock.representative, balance: previousBlock.balance, signature: null, work: null};
-    const previousHash = this.util.hex.fromUint8(this.util.ceviz.hashStateBlock(block));
+    const previousHash = this.util.hex.fromUint8(this.util.badem.hashStateBlock(block));
     if (!currentBlock.previous || previousHash !== currentBlock.previous) {
       this.notificationService.sendError(`The hash of the previous block does not match the frontier in the new block!`, {length: 0});
     }
@@ -239,7 +239,7 @@ export class SignComponent implements OnInit {
     switch (this.signTypeSelected) {
       // wallet
       case this.signTypes[0]:
-        this.walletAccount = this.accounts.find(a => a.id.replace('ceviz_', 'ceviz_') === this.signatureAccount);
+        this.walletAccount = this.accounts.find(a => a.id.replace('badem_', 'badem_') === this.signatureAccount);
         if (!this.walletAccount) {
           return this.signatureMessage = 'Could not find a matching wallet account to sign with. Make sure it\'s added under your accounts';
         } else {
@@ -293,9 +293,9 @@ export class SignComponent implements OnInit {
     }
 
     if (this.txType === TxType.send || this.txType === TxType.change) {
-      this.signatureAccount = this.fromAccountID.replace('ceviz_', 'ceviz_').toLowerCase();
+      this.signatureAccount = this.fromAccountID.replace('badem_', 'badem_').toLowerCase();
     } else if (this.txType === TxType.receive || this.txType === TxType.open) {
-      this.signatureAccount = this.toAccountID.replace('ceviz_', 'ceviz_').toLowerCase();
+      this.signatureAccount = this.toAccountID.replace('badem_', 'badem_').toLowerCase();
     }
 
     if (this.shouldSign) {
@@ -331,7 +331,7 @@ export class SignComponent implements OnInit {
     this.confirmingTransaction = true;
 
     // sign the block
-    const block = await this.cevizBlock.signOfflineBlock(walletAccount, this.currentBlock,
+    const block = await this.bademBlock.signOfflineBlock(walletAccount, this.currentBlock,
       this.previousBlock, this.txType, this.shouldGenWork, this.selectedThreshold, isLedger);
     console.log('Signature: ' + block.signature || 'Error');
     console.log('Work: ' + block.work || 'Not applied');
@@ -357,10 +357,10 @@ export class SignComponent implements OnInit {
         this.clean(this.previousBlock);
       }
       if (this.previousBlock) {
-        this.qrString = 'cevizprocess:{"block":' + JSON.stringify(block) +
+        this.qrString = 'bademprocess:{"block":' + JSON.stringify(block) +
         ',"previous":' + JSON.stringify(this.previousBlock) + '}';
       } else {
-        this.qrString = 'cevizprocess:{"block":' + JSON.stringify(block) + '}';
+        this.qrString = 'bademprocess:{"block":' + JSON.stringify(block) + '}';
       }
 
       const qrCode = await QRCode.toDataURL(this.qrString, { errorCorrectionLevel: 'L', scale: 16 });
@@ -479,7 +479,7 @@ export class SignComponent implements OnInit {
     this.validIndex = true;
     if (this.util.string.isNumeric(index) && index % 1 === 0) {
       index = parseInt(index, 10);
-      if (!this.util.ceviz.isValidIndex(index)) {
+      if (!this.util.badem.isValidIndex(index)) {
         this.validIndex = false;
       }
       if (index > INDEX_MAX) {
@@ -515,7 +515,7 @@ export class SignComponent implements OnInit {
     }
 
     // nano seed
-    if (keyType === 'ceviz_seed' || seed !== '' || keyType === 'bip39_seed') {
+    if (keyType === 'badem_seed' || seed !== '' || keyType === 'bip39_seed') {
       if (seed === '') { // seed from input, no mnemonic
         seed = input;
       }
@@ -558,8 +558,8 @@ export class SignComponent implements OnInit {
   checkMasterKey(key) {
     // validate nano seed
     if (key.length === 64) {
-      if (this.util.ceviz.isValidSeed(key)) {
-        return 'ceviz_seed';
+      if (this.util.badem.isValidSeed(key)) {
+        return 'badem_seed';
       }
     }
     // validate bip39 seed

@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { CevizBlockService } from './nano-block.service';
+import { BademBlockService } from './nano-block.service';
 
-describe('CevizBlockService', () => {
+describe('BademBlockService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CevizBlockService]
+      providers: [BademBlockService]
     });
   });
 
-  it('should be created', inject([CevizBlockService], (service: CevizBlockService) => {
+  it('should be created', inject([BademBlockService], (service: BademBlockService) => {
     expect(service).toBeTruthy();
   }));
 });

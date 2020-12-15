@@ -28,14 +28,14 @@ import {WorkPoolService} from './services/work-pool.service';
 import {ConfigureAppComponent} from './components/configure-app/configure-app.component';
 import {AppSettingsService} from './services/app-settings.service';
 import {WebsocketService} from './services/websocket.service';
-import {CevizBlockService} from './services/nano-block.service';
+import {BademBlockService} from './services/nano-block.service';
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import {PriceService} from './services/price.service';
 import { FiatPipe } from './pipes/fiat.pipe';
 import { AmountSplitPipe } from './pipes/amount-split.pipe';
 import { ImportWalletComponent } from './components/import-wallet/import-wallet.component';
-import { CevizAccountIdComponent } from './components/helpers/nano-account-id/nano-account-id.component';
+import { BademAccountIdComponent } from './components/helpers/nano-account-id/nano-account-id.component';
 import {PowService} from './services/pow.service';
 import { ImportAddressBookComponent } from './components/import-address-book/import-address-book.component';
 import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
@@ -82,7 +82,7 @@ import { QrGeneratorComponent } from './components/qr-generator/qr-generator.com
     FiatPipe,
     AmountSplitPipe,
     ImportWalletComponent,
-    CevizAccountIdComponent,
+    BademAccountIdComponent,
     ImportAddressBookComponent,
     CurrencySymbolPipe,
     RepresentativesComponent,
@@ -118,7 +118,7 @@ import { QrGeneratorComponent } from './components/qr-generator/qr-generator.com
     WorkPoolService,
     AppSettingsService,
     WebsocketService,
-    CevizBlockService,
+    BademBlockService,
     PriceService,
     PowService,
     RepresentativeService,

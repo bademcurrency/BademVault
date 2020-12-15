@@ -45,7 +45,7 @@ export class WorkPoolService {
   // Get work for a hash.  Uses the cache, or the current setting for generating it.
   public async getWork(hash, multiplier= 1) {
     const cached = this.workCache.find(p => p.hash === hash);
-    if (cached && cached.work && this.util.ceviz.validateWork(hash, baseThreshold, cached.work)) {
+    if (cached && cached.work && this.util.badem.validateWork(hash, baseThreshold, cached.work)) {
       console.log('Using cached work: ' + cached.work);
       return cached.work;
     }
