@@ -55,7 +55,7 @@ export class AppSettingsService {
     },
     {
       name: 'Badem API 1',
-      value: 'badem',
+      value: 'badem-api-1',
       api: 'https://badem-api.badem.io/proxy',
       ws: 'wss://badem-ws.badem.io',
       auth: null,
@@ -63,7 +63,7 @@ export class AppSettingsService {
     },
     {
       name: 'Badem API 2',
-      value: 'badem',
+      value: 'badem-api-2',
       api: 'https://badem-api-2.badem.io/proxy',
       ws: 'wss://badem-ws-2.badem.io',
       auth: null,
@@ -71,7 +71,7 @@ export class AppSettingsService {
     },
     {
       name: 'Badem API 3',
-      value: 'badem',
+      value: 'badem-api-3',
       api: 'https://badem-api-3.badem.io/proxy',
       ws: 'wss://badem-ws-3.badem.io',
       auth: null,
