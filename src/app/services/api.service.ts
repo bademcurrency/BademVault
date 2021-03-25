@@ -33,19 +33,23 @@ export class ApiService {
         this.node.setOnline();
         return res;
       })
-      .catch(err => {
+      .catch(async err => {
         if (skipError) return;
-        if (err.status === 500 || err.status === 0) {
-          this.node.setOffline(); // Hard error, node is offline
-          throw err;
-        } else if (err.status === 429) {
-          if (this.appSettings.settings.serverName === 'random') {
-            console.log('Too many requests, new backend...');
-            this.appSettings.loadServerSettings();
-            return this.request(action, data);
-          } else {
+        console.log('Node responded with error', err.status);
+
+        if (this.appSettings.settings.serverName === 'random') {
+          // choose a new backend and do the request again
+          this.appSettings.loadServerSettings();
+          await this.sleep(1000); // delay if all servers are down
+          return this.request(action, data, skipError);
+        } else {
+          // hard exit
+          if (err.status === 429) {
             this.node.setOffline('Too Many Requests to the node. Try again later or choose a different node.');
+          } else {
+            this.node.setOffline();
           }
+          throw err;
         }
       });
   }
@@ -68,7 +72,6 @@ export class ApiService {
   async representativesOnline(): Promise<{ representatives: any }> {
     return await this.request('representatives_online', { });
   }
-
   async blocksInfo(blocks): Promise<{blocks: any, error?: string}> {
     return await this.request('blocks_info', { hashes: blocks, pending: true, source: true });
   }
@@ -109,5 +112,8 @@ export class ApiService {
   async confirmationQuorum(): Promise<{quorum_delta: string, online_weight_quorum_percent: number, online_weight_minimum: string,
     online_stake_total: string, peers_stake_total: string, peers_stake_required: string }> {
     return await this.request('confirmation_quorum', { }, true);
+  }
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
